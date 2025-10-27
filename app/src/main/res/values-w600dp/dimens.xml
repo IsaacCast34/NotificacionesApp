@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="padding_normal">32dp</dimen>
+    <dimen name="text_size_title">24sp</dimen>
+    <dimen name="text_size_body">18sp</dimen>
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NotificacionesApp</string>
+    <string name="titulo">Título</string>
+    <string name="descripcion">Descripción</string>
+    <string name="hora">Hora</string>
+    <string name="seleccionar_hora">Seleccionar hora</string>
+    <string name="completado">¿Completado?</string>
+    <string name="prioridad">Prioridad</string>
+    <string name="alta">Alta</string>
+    <string name="media">Media</string>
+    <string name="baja">Baja</string>
+    <string name="guardar">Guardar Nota</string>
+    <string name="nota_guardada">Nota guardada</string>
+    <string name="campos_obligatorios">Completa los campos obligatorios</string>
+    <string name="notas">Notas</string>
+    <string name="nueva_nota">Nueva Nota</string>
+    <string name="pendiente">Pendiente</string>
+</resources>

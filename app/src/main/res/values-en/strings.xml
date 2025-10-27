@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NotificacionesApp</string>
+    <string name="titulo">Title</string>
+    <string name="descripcion">Description</string>
+    <string name="hora">Time</string>
+    <string name="seleccionar_hora">Select time</string>
+    <string name="completado">Completed?</string>
+    <string name="prioridad">Priority</string>
+    <string name="alta">High</string>
+    <string name="media">Medium</string>
+    <string name="baja">Low</string>
+    <string name="guardar">Save Note</string>
+    <string name="nota_guardada">Note saved</string>
+    <string name="campos_obligatorios">Please complete required fields</string>
+    <string name="notas">Notes</string>
+    <string name="nueva_nota">New Note</string>
+    <string name="pending">Pending</string>
+</resources>
