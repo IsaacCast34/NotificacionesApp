@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.notificacionesapp"
-        minSdk = 29
+        minSdk = 36
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -49,6 +49,7 @@ val composeBomVersion = "2024.06.00"
 dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
 
@@ -72,7 +73,6 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
-    // ... otras dependencias
 
     // Testing
     testImplementation("junit:junit:4.13.2")

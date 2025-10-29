@@ -7,17 +7,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.notificacionesapp.R
 import com.example.notificacionesapp.ui.components.ListaNotas
 import com.example.notificacionesapp.viewmodel.NotaViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue // Esta también es útil
+
 
 @Composable
 fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
-    val notas = notaViewModel.todasLasNotas.value ?: emptyList()
+    val notas by notaViewModel.todasLasNotas.collectAsState(initial = emptyList())
 
     val padding = dimensionResource(id = R.dimen.padding_normal)
-    val titleSize = dimensionResource(id = R.dimen.text_size_title)
+
+    // SOLUCIÓN 3: Extraer el valor float del recurso
+    val titleSizeDp = dimensionResource(id = R.dimen.text_size_title)
+    val titleSize = titleSizeDp.value.sp
 
     Scaffold(
         topBar = {
@@ -25,14 +32,14 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
                 title = {
                     Text(
                         text = stringResource(R.string.notas),
-                        fontSize = titleSize.value.sp
+                        fontSize = titleSize
                     )
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate("notaForm") }) {
-                Text("+", fontSize = titleSize.value.sp)
+                Text("+", fontSize = titleSize)
             }
         }
     ) { innerPadding ->
@@ -45,5 +52,3 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
         }
     }
 }
-
-

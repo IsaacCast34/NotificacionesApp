@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NotificacionesApp</string>
+    <string name="app_name">NotificationsApp</string>
     <string name="titulo">Title</string>
     <string name="descripcion">Description</string>
     <string name="hora">Time</string>
@@ -11,8 +11,14 @@
     <string name="baja">Low</string>
     <string name="guardar">Save Note</string>
     <string name="nota_guardada">Note saved</string>
-    <string name="campos_obligatorios">Please complete required fields</string>
+    <string name="campos_obligatorios">Please complete all required fields</string>
     <string name="notas">Notes</string>
     <string name="nueva_nota">New Note</string>
-    <string name="pending">Pending</string>
+    <string name="editar">Edit</string>
+    <string name="eliminar">Delete</string>
+    <string name="nota_no_encontrada">Note not found</string>
+    <string name="pendiente">Pending</string>
+    <string name="editar_nota">Edit Note</string>
+    <string name="nota_actualizada">Note updated</string>
+
 </resources>

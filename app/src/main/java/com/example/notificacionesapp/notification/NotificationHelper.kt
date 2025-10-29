@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.notificacionesapp.R
 
+
 object NotificationHelper {
     private const val CHANNEL_ID = "notas_channel"
 

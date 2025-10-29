@@ -18,11 +18,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.notificacionesapp.R
 import com.example.notificacionesapp.data.entities.Nota
-import com.example.notificacionesapp.notifications.AlarmReceiver
+import com.example.notificacionesapp.notification.AlarmReceiver
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun NotaFormScreen(
@@ -138,15 +139,15 @@ fun NotaFormScreen(
                     if (notaId == null) {
                         notaViewModel.insertar(nota)
                         programarNotificacion(context, nota)
-                        Toast.makeText(context, stringResource(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
                     } else {
                         notaViewModel.actualizar(nota)
-                        Toast.makeText(context, stringResource(R.string.nota_actualizada), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
                     }
                     navController.popBackStack()
                 }
             } else {
-                Toast.makeText(context, stringResource(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
             }
         }) {
             Text(stringResource(R.string.guardar), fontSize = bodySize.value.sp)

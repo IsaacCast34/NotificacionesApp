@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.notificacionesapp.R
 import com.example.notificacionesapp.viewmodel.NotaViewModel
-
+import androidx.compose.ui.unit.dp
 @Composable
 fun NotaDetalleScreen(
     notaId: Int,

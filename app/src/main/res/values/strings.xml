@@ -13,6 +13,10 @@
     <string name="nota_guardada">Nota guardada</string>
     <string name="campos_obligatorios">Completa los campos obligatorios</string>
     <string name="notas">Notas</string>
-    <string name="nueva_nota">Nueva Nota</string>
+    <string name="nueva_nota">Nueva Nota</string><string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="nota_no_encontrada">Nota no encontrada</string>
     <string name="pendiente">Pendiente</string>
+    <string name="editar_nota">Editar nota</string>
+    <string name="nota_actualizada">Nota actualizada</string>
 </resources>
