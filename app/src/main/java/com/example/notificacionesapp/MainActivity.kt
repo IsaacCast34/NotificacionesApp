@@ -8,23 +8,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notificacionesapp.ui.theme.NotificacionesAppTheme
-import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.example.notificacionesapp.navigation.AppNavigation
 import com.example.notificacionesapp.viewmodel.NotaViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val notaViewModel: NotaViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            AppNavigation(navController, notaViewModel)
+            AppNavigation(navController)
         }
     }
 }
-
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

@@ -5,10 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notificacionesapp.data.entities.Nota
 import com.example.notificacionesapp.data.repository.NotaRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotaViewModel(private val notaRepository: NotaRepository) : ViewModel() {
+@HiltViewModel
+class NotaViewModel @Inject constructor(
+    private val notaRepository: NotaRepository
+) : ViewModel() {
 
     val todasLasNotas: Flow<List<Nota>> = notaRepository.obtenerTodas()
 
