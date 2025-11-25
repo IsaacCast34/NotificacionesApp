@@ -1,29 +1,33 @@
 package com.example.notificacionesapp.ui.screens
 
 import android.app.AlarmManager
+import android.Manifest
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.notificacionesapp.R
 import com.example.notificacionesapp.data.entities.Nota
 import com.example.notificacionesapp.notification.AlarmReceiver
 import com.example.notificacionesapp.viewmodel.NotaViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun NotaFormScreen(
@@ -34,26 +38,38 @@ fun NotaFormScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    var titulo by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
-    var hora by remember { mutableStateOf("") }
-    var completado by remember { mutableStateOf(false) }
-    var prioridad by remember { mutableStateOf("Media") }
+    var imagenUri by rememberSaveable { mutableStateOf<String?>(null) }
+    var audioUri by rememberSaveable { mutableStateOf<String?>(null) }
+
+    val titulo by notaViewModel.titulo
+    val descripcion by notaViewModel.descripcion
+    val hora by notaViewModel.hora
+    val completado by notaViewModel.completado
+    val prioridad by notaViewModel.prioridad
 
     val padding = dimensionResource(id = R.dimen.padding_normal)
     val titleSize = dimensionResource(id = R.dimen.text_size_title)
     val bodySize = dimensionResource(id = R.dimen.text_size_body)
 
-    // Precarga si notaId ≠ null
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> imagenUri = uri?.toString() }
+
+    val audioPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> audioUri = uri?.toString() }
+
     LaunchedEffect(notaId) {
         if (notaId != null) {
-            notaViewModel.obtenerNotaPorId(notaId).collectLatest { nota ->
+            notaViewModel.obtenerNotaPorId(notaId).collect { nota ->
                 nota?.let {
-                    titulo = it.titulo
-                    descripcion = it.descripcion
-                    hora = it.hora
-                    completado = it.completado
-                    prioridad = "Media" // puedes extender esto si lo guardas
+                    notaViewModel.titulo.value = it.titulo
+                    notaViewModel.descripcion.value = it.descripcion
+                    notaViewModel.hora.value = it.hora
+                    notaViewModel.completado.value = it.completado
+                    notaViewModel.prioridad.value = it.prioridad
+                    imagenUri = it.imagenUri
+                    audioUri = it.audioUri
                 }
             }
         }
@@ -70,7 +86,7 @@ fun NotaFormScreen(
 
         OutlinedTextField(
             value = titulo,
-            onValueChange = { titulo = it },
+            onValueChange = { notaViewModel.titulo.value = it },
             label = { Text(stringResource(R.string.titulo), fontSize = bodySize.value.sp) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -79,7 +95,7 @@ fun NotaFormScreen(
 
         OutlinedTextField(
             value = descripcion,
-            onValueChange = { descripcion = it },
+            onValueChange = { notaViewModel.descripcion.value = it },
             label = { Text(stringResource(R.string.descripcion), fontSize = bodySize.value.sp) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -90,7 +106,7 @@ fun NotaFormScreen(
             val cal = Calendar.getInstance()
             TimePickerDialog(
                 context,
-                { _, hour, minute -> hora = "%02d:%02d".format(hour, minute) },
+                { _, hour, minute -> notaViewModel.hora.value = "%02d:%02d".format(hour, minute) },
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
                 true
@@ -105,7 +121,7 @@ fun NotaFormScreen(
         Spacer(modifier = Modifier.height(padding))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = completado, onCheckedChange = { completado = it })
+            Checkbox(checked = completado, onCheckedChange = { notaViewModel.completado.value = it })
             Text(stringResource(R.string.completado), fontSize = bodySize.value.sp)
         }
 
@@ -113,14 +129,36 @@ fun NotaFormScreen(
 
         Text(stringResource(R.string.prioridad), fontSize = bodySize.value.sp)
         Row {
-            RadioButton(selected = prioridad == "Alta", onClick = { prioridad = "Alta" })
+            RadioButton(selected = prioridad == "Alta", onClick = { notaViewModel.prioridad.value = "Alta" })
             Text(stringResource(R.string.alta), fontSize = bodySize.value.sp)
             Spacer(modifier = Modifier.width(8.dp))
-            RadioButton(selected = prioridad == "Media", onClick = { prioridad = "Media" })
+            RadioButton(selected = prioridad == "Media", onClick = { notaViewModel.prioridad.value = "Media" })
             Text(stringResource(R.string.media), fontSize = bodySize.value.sp)
             Spacer(modifier = Modifier.width(8.dp))
-            RadioButton(selected = prioridad == "Baja", onClick = { prioridad = "Baja" })
+            RadioButton(selected = prioridad == "Baja", onClick = { notaViewModel.prioridad.value = "Baja" })
             Text(stringResource(R.string.baja), fontSize = bodySize.value.sp)
+        }
+
+        Spacer(modifier = Modifier.height(padding))
+
+        Text(stringResource(R.string.multimedia), fontSize = bodySize.value.sp)
+
+        Button(onClick = { imagePicker.launch("image/*") }) {
+            Text(stringResource(R.string.seleccionar_imagen), fontSize = bodySize.value.sp)
+        }
+
+        imagenUri?.let {
+            Text("${stringResource(R.string.imagen_adjunta)}: $it", fontSize = bodySize.value.sp)
+        }
+
+        Spacer(modifier = Modifier.height(padding))
+
+        Button(onClick = { audioPicker.launch("audio/*") }) {
+            Text(stringResource(R.string.seleccionar_audio), fontSize = bodySize.value.sp)
+        }
+
+        audioUri?.let {
+            Text("${stringResource(R.string.audio_adjunta)}: $it", fontSize = bodySize.value.sp)
         }
 
         Spacer(modifier = Modifier.height(padding))
@@ -132,7 +170,10 @@ fun NotaFormScreen(
                     titulo = titulo,
                     descripcion = descripcion,
                     hora = hora,
-                    completado = completado
+                    completado = completado,
+                    prioridad = prioridad,
+                    imagenUri = imagenUri,
+                    audioUri = audioUri
                 )
 
                 scope.launch {
@@ -142,12 +183,12 @@ fun NotaFormScreen(
                         Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
                     } else {
                         notaViewModel.actualizar(nota)
-                        Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.nota_actualizada), Toast.LENGTH_SHORT).show()
                     }
                     navController.popBackStack()
                 }
             } else {
-                Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show()
             }
         }) {
             Text(stringResource(R.string.guardar), fontSize = bodySize.value.sp)

@@ -47,7 +47,7 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
             .padding(innerPadding)
             .padding(padding)) {
             ListaNotas(notas) { nota ->
-                // Navegación futura a detalle si se desea
+                navController.navigate("detalleNota/${nota.id}")
             }
         }
     }

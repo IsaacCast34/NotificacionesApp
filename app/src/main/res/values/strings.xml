@@ -19,4 +19,21 @@
     <string name="pendiente">Pendiente</string>
     <string name="editar_nota">Editar nota</string>
     <string name="nota_actualizada">Nota actualizada</string>
+    <string name="multimedia">Multimedia</string>
+    <string name="seleccionar_imagen">Seleccionar imagen</string>
+    <string name="imagen_adjunta">Imagen adjunta</string>
+    <string name="seleccionar_audio">Seleccionar audio</string>
+    <string name="audio_adjunta">Audio adjunto</string>
+    <string name="elegir_metodo">Elegir método para seleccionar imagen</string>
+    <string name="galeria">Galería</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="eliminar_imagen">Eliminar imagen</string>
+    <string name="sin_imagen">Sin imagen</string>
+    <string name="grabar_audio">Grabar audio</string>
+    <string name="detener_grabacion">Detener grabación</string>
+    <string name="iniciar_grabacion">Iniciar grabación</string>
+    <string name="grabando">Grabando…</string>
+    <string name="audio_adjunto">Audio adjunto</string>
+    <string name="audio_grabado">Audio grabado</string>
+    <string name="campos_obligatorios_nota">Completa título y hora</string>
 </resources>

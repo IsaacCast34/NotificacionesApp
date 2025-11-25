@@ -10,6 +10,7 @@ data class Nota(
     val descripcion: String,
     val hora: String,
     val completado: Boolean,
+    val prioridad: String = "Media",
     val imagenUri: String? = null,
     val audioUri: String? = null
 )

@@ -11,14 +11,30 @@
     <string name="baja">Low</string>
     <string name="guardar">Save Note</string>
     <string name="nota_guardada">Note saved</string>
-    <string name="campos_obligatorios">Please complete all required fields</string>
+    <string name="campos_obligatorios">Fill in the required fields</string>
     <string name="notas">Notes</string>
     <string name="nueva_nota">New Note</string>
     <string name="editar">Edit</string>
     <string name="eliminar">Delete</string>
     <string name="nota_no_encontrada">Note not found</string>
     <string name="pendiente">Pending</string>
-    <string name="editar_nota">Edit Note</string>
+    <string name="editar_nota">Edit note</string>
     <string name="nota_actualizada">Note updated</string>
-
+    <string name="multimedia">Multimedia</string>
+    <string name="seleccionar_imagen">Select image</string>
+    <string name="imagen_adjunta">Attached image</string>
+    <string name="seleccionar_audio">Select audio</string>
+    <string name="audio_adjunta">Attached audio</string>
+    <string name="elegir_metodo">Choose method to select image</string>
+    <string name="galeria">Gallery</string>
+    <string name="cancelar">Cancel</string>
+    <string name="eliminar_imagen">Delete image</string>
+    <string name="sin_imagen">No image</string>
+    <string name="grabar_audio">Record audio</string>
+    <string name="detener_grabacion">Stop recording</string>
+    <string name="iniciar_grabacion">Start recording</string>
+    <string name="grabando">Recording…</string>
+    <string name="audio_adjunto">Attached audio</string>
+    <string name="audio_grabado">Recorded audio</string>
+    <string name="campos_obligatorios_nota">Fill in title and time</string>
 </resources>

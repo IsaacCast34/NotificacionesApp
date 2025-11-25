@@ -1,0 +1,20 @@
+<resources>
+    <!-- ESPACIADO -->
+    <dimen name="padding_normal">48dp</dimen>
+    <dimen name="padding_large">64dp</dimen>
+    <dimen name="padding_small">24dp</dimen>
+
+    <!-- TEXTO -->
+    <dimen name="text_size_title">32sp</dimen>
+    <dimen name="text_size_subtitle">24sp</dimen>
+    <dimen name="text_size_body">20sp</dimen>
+    <dimen name="text_size_caption">18sp</dimen>
+
+    <!-- COMPONENTES -->
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="item_spacing">16dp</dimen>
+    <dimen name="fab_size">72dp</dimen>
+    <dimen name="icon_size_large">40dp</dimen>
+    <dimen name="checkbox_size">28dp</dimen>
+</resources>
