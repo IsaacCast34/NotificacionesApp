@@ -1,7 +1,6 @@
 package com.example.notificacionesapp.ui.screens
 
 import android.app.AlarmManager
-import android.Manifest
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
@@ -11,24 +10,27 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.notificacionesapp.R
 import com.example.notificacionesapp.data.entities.Nota
 import com.example.notificacionesapp.notification.AlarmReceiver
+import com.example.notificacionesapp.ui.components.MultimediaSection
+import com.example.notificacionesapp.ui.components.PrioridadChip
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotaFormScreen(
     notaViewModel: NotaViewModel,
@@ -38,182 +40,321 @@ fun NotaFormScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    var imagenUri by rememberSaveable { mutableStateOf<String?>(null) }
-    var audioUri by rememberSaveable { mutableStateOf<String?>(null) }
+    // Estados locales
+    var titulo by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var hora by remember { mutableStateOf("") }
+    var completado by remember { mutableStateOf(false) }
+    var prioridad by remember { mutableStateOf("Media") }
+    var imagenUri by remember { mutableStateOf<String?>(null) }
+    var audioUri by remember { mutableStateOf<String?>(null) }
+    var videoUri by remember { mutableStateOf<String?>(null) }
+    var categoria by remember { mutableStateOf("General") }
+    var etiquetas by remember { mutableStateOf("") }
 
-    val titulo by notaViewModel.titulo
-    val descripcion by notaViewModel.descripcion
-    val hora by notaViewModel.hora
-    val completado by notaViewModel.completado
-    val prioridad by notaViewModel.prioridad
-
-    val padding = dimensionResource(id = R.dimen.padding_normal)
-    val titleSize = dimensionResource(id = R.dimen.text_size_title)
-    val bodySize = dimensionResource(id = R.dimen.text_size_body)
-
-    val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> imagenUri = uri?.toString() }
-
-    val audioPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> audioUri = uri?.toString() }
-
+    // Cargar datos si estamos editando
     LaunchedEffect(notaId) {
-        if (notaId != null) {
+        if (notaId != null && notaId != 0) {
             notaViewModel.obtenerNotaPorId(notaId).collect { nota ->
                 nota?.let {
-                    notaViewModel.titulo.value = it.titulo
-                    notaViewModel.descripcion.value = it.descripcion
-                    notaViewModel.hora.value = it.hora
-                    notaViewModel.completado.value = it.completado
-                    notaViewModel.prioridad.value = it.prioridad
+                    titulo = it.titulo
+                    descripcion = it.descripcion
+                    hora = it.hora
+                    completado = it.completado
+                    prioridad = it.prioridad
                     imagenUri = it.imagenUri
                     audioUri = it.audioUri
+                    videoUri = it.videoUri
+                    categoria = it.categoria
+                    etiquetas = it.etiquetas
                 }
             }
         }
     }
 
-    Column(modifier = Modifier.padding(padding)) {
-        Text(
-            text = if (notaId == null) stringResource(R.string.nueva_nota)
-            else stringResource(R.string.editar_nota),
-            fontSize = titleSize.value.sp
-        )
-
-        Spacer(modifier = Modifier.height(padding))
-
-        OutlinedTextField(
-            value = titulo,
-            onValueChange = { notaViewModel.titulo.value = it },
-            label = { Text(stringResource(R.string.titulo), fontSize = bodySize.value.sp) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(padding))
-
-        OutlinedTextField(
-            value = descripcion,
-            onValueChange = { notaViewModel.descripcion.value = it },
-            label = { Text(stringResource(R.string.descripcion), fontSize = bodySize.value.sp) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Button(onClick = {
-            val cal = Calendar.getInstance()
-            TimePickerDialog(
-                context,
-                { _, hour, minute -> notaViewModel.hora.value = "%02d:%02d".format(hour, minute) },
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-                true
-            ).show()
-        }) {
-            Text(stringResource(R.string.seleccionar_hora), fontSize = bodySize.value.sp)
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-        Text("${stringResource(R.string.hora)}: $hora", fontSize = bodySize.value.sp)
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = completado, onCheckedChange = { notaViewModel.completado.value = it })
-            Text(stringResource(R.string.completado), fontSize = bodySize.value.sp)
-        }
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Text(stringResource(R.string.prioridad), fontSize = bodySize.value.sp)
-        Row {
-            RadioButton(selected = prioridad == "Alta", onClick = { notaViewModel.prioridad.value = "Alta" })
-            Text(stringResource(R.string.alta), fontSize = bodySize.value.sp)
-            Spacer(modifier = Modifier.width(8.dp))
-            RadioButton(selected = prioridad == "Media", onClick = { notaViewModel.prioridad.value = "Media" })
-            Text(stringResource(R.string.media), fontSize = bodySize.value.sp)
-            Spacer(modifier = Modifier.width(8.dp))
-            RadioButton(selected = prioridad == "Baja", onClick = { notaViewModel.prioridad.value = "Baja" })
-            Text(stringResource(R.string.baja), fontSize = bodySize.value.sp)
-        }
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Text(stringResource(R.string.multimedia), fontSize = bodySize.value.sp)
-
-        Button(onClick = { imagePicker.launch("image/*") }) {
-            Text(stringResource(R.string.seleccionar_imagen), fontSize = bodySize.value.sp)
-        }
-
-        imagenUri?.let {
-            Text("${stringResource(R.string.imagen_adjunta)}: $it", fontSize = bodySize.value.sp)
-        }
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Button(onClick = { audioPicker.launch("audio/*") }) {
-            Text(stringResource(R.string.seleccionar_audio), fontSize = bodySize.value.sp)
-        }
-
-        audioUri?.let {
-            Text("${stringResource(R.string.audio_adjunta)}: $it", fontSize = bodySize.value.sp)
-        }
-
-        Spacer(modifier = Modifier.height(padding))
-
-        Button(onClick = {
-            if (titulo.isNotBlank() && hora.isNotBlank()) {
-                val nota = Nota(
-                    id = notaId ?: 0,
-                    titulo = titulo,
-                    descripcion = descripcion,
-                    hora = hora,
-                    completado = completado,
-                    prioridad = prioridad,
-                    imagenUri = imagenUri,
-                    audioUri = audioUri
-                )
-
-                scope.launch {
-                    if (notaId == null) {
-                        notaViewModel.insertar(nota)
-                        programarNotificacion(context, nota)
-                        Toast.makeText(context, context.getString(R.string.nota_guardada), Toast.LENGTH_SHORT).show()
-                    } else {
-                        notaViewModel.actualizar(nota)
-                        Toast.makeText(context, context.getString(R.string.nota_actualizada), Toast.LENGTH_SHORT).show()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = if (notaId == null) "Nueva Nota" else "Editar Nota"
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
-                    navController.popBackStack()
                 }
-            } else {
-                Toast.makeText(context, context.getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show()
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    if (titulo.isNotBlank() && hora.isNotBlank()) {
+                        val nota = Nota(
+                            id = notaId ?: 0,
+                            titulo = titulo,
+                            descripcion = descripcion,
+                            hora = hora,
+                            completado = completado,
+                            prioridad = prioridad,
+                            categoria = categoria,
+                            etiquetas = etiquetas,
+                            imagenUri = imagenUri,
+                            audioUri = audioUri,
+                            videoUri = videoUri
+                        )
+
+                        scope.launch {
+                            if (notaId == null) {
+                                notaViewModel.insertar(nota)
+                                programarAlarma(context, nota)
+                                Toast.makeText(context, "Nota creada exitosamente", Toast.LENGTH_SHORT).show()
+                            } else {
+                                cancelarAlarma(context, notaId)
+                                notaViewModel.actualizar(nota)
+                                programarAlarma(context, nota)
+                                Toast.makeText(context, "Nota actualizada exitosamente", Toast.LENGTH_SHORT).show()
+                            }
+                            navController.popBackStack()
+                        }
+                    } else {
+                        Toast.makeText(context, "Título y hora son obligatorios", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            ) {
+                Icon(Icons.Default.Check, contentDescription = "Guardar")
             }
-        }) {
-            Text(stringResource(R.string.guardar), fontSize = bodySize.value.sp)
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Sección: Información Básica
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Información Básica",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedTextField(
+                        value = titulo,
+                        onValueChange = { titulo = it },
+                        label = { Text("Título *") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedTextField(
+                        value = descripcion,
+                        onValueChange = { descripcion = it },
+                        label = { Text("Descripción") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp),
+                        singleLine = false
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            val cal = Calendar.getInstance()
+                            TimePickerDialog(
+                                context,
+                                { _, hour, minute ->
+                                    hora = "%02d:%02d".format(hour, minute)
+                                },
+                                cal.get(Calendar.HOUR_OF_DAY),
+                                cal.get(Calendar.MINUTE),
+                                true
+                            ).show()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Seleccionar Hora *")
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Hora seleccionada: $hora",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sección: Estado y Prioridad
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Estado y Prioridad",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = completado,
+                            onCheckedChange = { completado = it }
+                        )
+                        Text("Completado")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text("Prioridad:", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row {
+                        PrioridadChip(
+                            texto = "Alta",
+                            seleccionada = prioridad == "Alta",
+                            onClick = { prioridad = "Alta" }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        PrioridadChip(
+                            texto = "Media",
+                            seleccionada = prioridad == "Media",
+                            onClick = { prioridad = "Media" }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        PrioridadChip(
+                            texto = "Baja",
+                            seleccionada = prioridad == "Baja",
+                            onClick = { prioridad = "Baja" }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sección: Multimedia
+            MultimediaSection(
+                imageUri = imagenUri,
+                audioUri = audioUri,
+                videoUri = videoUri,
+                onImageSelected = { uri ->
+                    imagenUri = uri?.toString()
+                },
+                onAudioRecorded = { uri ->
+                    audioUri = uri.toString()
+                },
+                onVideoSelected = { uri ->
+                    videoUri = uri?.toString()
+                },
+                onRemoveImage = { imagenUri = null },
+                onRemoveAudio = { audioUri = null },
+                onRemoveVideo = { videoUri = null },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Información de campos obligatorios
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "* Campos obligatorios: Título y Hora",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(8.dp),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
         }
     }
 }
 
-private fun programarNotificacion(context: Context, nota: Nota) {
+@Composable
+fun PrioridadChip(
+    texto: String,
+    seleccionada: Boolean,
+    onClick: () -> Unit
+) {
+    val backgroundColor = if (seleccionada) MaterialTheme.colorScheme.primary
+    else MaterialTheme.colorScheme.surface
+    val contentColor = if (seleccionada) MaterialTheme.colorScheme.onPrimary
+    else MaterialTheme.colorScheme.onSurface
+
+    Surface(
+        color = backgroundColor,
+        contentColor = contentColor,
+        shape = MaterialTheme.shapes.small,
+        shadowElevation = if (seleccionada) 4.dp else 0.dp,
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
+        Text(
+            text = texto,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+private fun programarAlarma(context: Context, nota: Nota) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java).apply {
         putExtra("titulo", nota.titulo)
-        putExtra("mensaje", nota.descripcion)
+        putExtra("mensaje", nota.descripcion.ifEmpty { "Recordatorio de nota" })
     }
+
     val pendingIntent = PendingIntent.getBroadcast(
         context,
         nota.id,
         intent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val cal = Calendar.getInstance().apply {
-        val parts = nota.hora.split(":")
-        set(Calendar.HOUR_OF_DAY, parts[0].toInt())
-        set(Calendar.MINUTE, parts[1].toInt())
-        set(Calendar.SECOND, 0)
+    val partesHora = nota.hora.split(":")
+    if (partesHora.size == 2) {
+        val hora = partesHora[0].toInt()
+        val minuto = partesHora[1].toInt()
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hora)
+            set(Calendar.MINUTE, minuto)
+            set(Calendar.SECOND, 0)
+
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
+        }
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
     }
-    alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.timeInMillis, pendingIntent)
+}
+
+private fun cancelarAlarma(context: Context, notaId: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        notaId,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+    alarmManager.cancel(pendingIntent)
 }

@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,32 +15,30 @@ import androidx.compose.ui.unit.dp
 import com.example.notificacionesapp.R
 
 @Composable
-fun ImageSelector(
-    onImageSelected: (Uri?) -> Unit,
+fun VideoSelector(
+    onVideoSelected: (Uri?) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Launcher simple y directo - enfoque CodeLab
-    val imagePicker = rememberLauncherForActivityResult(
+    val videoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        onImageSelected(uri)
+        onVideoSelected(uri)
     }
 
     Button(
         onClick = {
-            // Lanzar directamente el selector de imágenes
-            imagePicker.launch("image/*")
+            videoPicker.launch("video/*")
         },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.secondary
+            backgroundColor = MaterialTheme.colors.primaryVariant
         )
     ) {
         Icon(
-            imageVector = Icons.Default.Photo,
-            contentDescription = stringResource(R.string.seleccionar_imagen)
+            imageVector = Icons.Default.Videocam,
+            contentDescription = stringResource(R.string.seleccionar_video)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(stringResource(R.string.seleccionar_imagen))
+        Text(stringResource(R.string.seleccionar_video))
     }
 }

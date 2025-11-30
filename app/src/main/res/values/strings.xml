@@ -36,4 +36,9 @@
     <string name="audio_adjunto">Audio adjunto</string>
     <string name="audio_grabado">Audio grabado</string>
     <string name="campos_obligatorios_nota">Completa título y hora</string>
+    <string name="seleccionar_video">Seleccionar Video</string>
+    <string name="eliminar_video">Eliminar Video</string>
+    <string name="sin_video">Sin video seleccionado</string>
+    <string name="permiso_denegado">Permiso denegado</string>
+    <string name="permiso_requerido">Se requieren permisos para acceder a multimedia</string>
 </resources>

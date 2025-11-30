@@ -39,6 +39,10 @@ fun AppNavigation(navController: NavHostController) {
                 NotaFormScreen(notaViewModel = notaViewModel, navController = navController, notaId = id)
             }
         }
+        composable("backup") {
+            val notaViewModel: NotaViewModel = hiltViewModel()
+            BackupScreen(navController = navController, notaViewModel = notaViewModel)
+        }
     }
 }
 

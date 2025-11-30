@@ -1,15 +1,14 @@
 package com.example.notificacionesapp.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notificacionesapp.data.entities.Nota
 import com.example.notificacionesapp.data.repository.NotaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.mutableStateOf
 
 @HiltViewModel
 class NotaViewModel @Inject constructor(
@@ -33,24 +32,12 @@ class NotaViewModel @Inject constructor(
     }
 
     fun eliminar(nota: Nota) {
-        viewModelScope.launch { notaRepository.eliminar(nota) }
+        viewModelScope.launch {
+            notaRepository.eliminar(nota)
+        }
     }
 
     fun obtenerNotaPorId(id: Int): Flow<Nota?> {
         return notaRepository.obtenerPorId(id)
-    }
-
-    fun cargarNota(id: Int) {
-        viewModelScope.launch {
-            obtenerNotaPorId(id).collectLatest { nota ->
-                nota?.let {
-                    titulo.value = it.titulo
-                    descripcion.value = it.descripcion
-                    hora.value = it.hora
-                    completado.value = it.completado
-                    prioridad.value = "Media"
-                }
-            }
-        }
     }
 }

@@ -37,4 +37,9 @@
     <string name="audio_adjunto">Attached audio</string>
     <string name="audio_grabado">Recorded audio</string>
     <string name="campos_obligatorios_nota">Fill in title and time</string>
-</resources>
+    string name="seleccionar_video">Select Video</string>
+<string name="eliminar_video">Delete Video</string>
+<string name="sin_video">No video selected</string>
+<string name="permiso_denegado">Permission denied</string>
+<string name="permiso_requerido">Permissions are required to access multimedia</string>
+    </resources>

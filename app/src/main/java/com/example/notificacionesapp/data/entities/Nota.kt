@@ -11,6 +11,9 @@ data class Nota(
     val hora: String,
     val completado: Boolean,
     val prioridad: String = "Media",
+    val categoria: String = "General",
+    val etiquetas: String = "",
     val imagenUri: String? = null,
-    val audioUri: String? = null
+    val audioUri: String? = null,
+    val videoUri: String? = null
 )

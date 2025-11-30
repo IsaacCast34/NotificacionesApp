@@ -54,6 +54,7 @@ fun getMediaPermissions(): List<String> {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
         permissions.add(Manifest.permission.READ_MEDIA_AUDIO)
+        permissions.add(Manifest.permission.READ_MEDIA_VIDEO) // ← NUEVO para Android 13+
     }
 
     permissions.add(Manifest.permission.CAMERA)
