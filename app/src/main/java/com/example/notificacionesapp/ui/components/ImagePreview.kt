@@ -2,9 +2,6 @@ package com.example.notificacionesapp.ui.components
 
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,9 +51,8 @@ fun ImagePreview(
                     contentColor = MaterialTheme.colorScheme.onError
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.eliminar_imagen)
-                    )
+                        painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = "Eliminar imagen")
                 }
             }
         } else {
@@ -69,7 +65,7 @@ fun ImagePreview(
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Photo,
+                    painter = painterResource(id = R.drawable.ic_photo),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )

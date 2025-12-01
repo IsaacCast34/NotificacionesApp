@@ -9,19 +9,19 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.notificacionesapp.R
 import com.example.notificacionesapp.data.entities.Nota
 import com.example.notificacionesapp.notification.AlarmReceiver
 import com.example.notificacionesapp.ui.components.MultimediaSection
@@ -29,7 +29,6 @@ import com.example.notificacionesapp.ui.components.PrioridadChip
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 import kotlinx.coroutines.launch
 import java.util.*
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotaFormScreen(
@@ -40,7 +39,6 @@ fun NotaFormScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Estados locales
     var titulo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var hora by remember { mutableStateOf("") }
@@ -52,7 +50,6 @@ fun NotaFormScreen(
     var categoria by remember { mutableStateOf("General") }
     var etiquetas by remember { mutableStateOf("") }
 
-    // Cargar datos si estamos editando
     LaunchedEffect(notaId) {
         if (notaId != null && notaId != 0) {
             notaViewModel.obtenerNotaPorId(notaId).collect { nota ->
@@ -82,7 +79,10 @@ fun NotaFormScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "Atrás"
+                        )
                     }
                 }
             )
@@ -123,7 +123,10 @@ fun NotaFormScreen(
                     }
                 }
             ) {
-                Icon(Icons.Default.Check, contentDescription = "Guardar")
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check),
+                    contentDescription = "Guardar"
+                )
             }
         }
     ) { innerPadding ->
@@ -133,7 +136,6 @@ fun NotaFormScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            // Sección: Información Básica
             Card(
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -196,7 +198,6 @@ fun NotaFormScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Sección: Estado y Prioridad
             Card(
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -246,7 +247,6 @@ fun NotaFormScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Sección: Multimedia
             MultimediaSection(
                 imageUri = imagenUri,
                 audioUri = audioUri,
@@ -268,7 +268,6 @@ fun NotaFormScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Información de campos obligatorios
             Card(
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 modifier = Modifier.fillMaxWidth()

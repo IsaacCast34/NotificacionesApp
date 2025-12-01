@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.flowlayout.FlowRow
+import androidx.compose.ui.res.painterResource
+import com.example.notificacionesapp.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +75,10 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
 
                     IconButton(onClick = { isSearchActive = !isSearchActive }) {
                         Icon(
-                            if (isSearchActive) Icons.Default.Close else Icons.Default.Search,
+                            painter = painterResource(
+                                id = if (isSearchActive) R.drawable.ic_close
+                                else R.drawable.ic_search
+                            ),
                             contentDescription = if (isSearchActive) "Cerrar búsqueda" else "Buscar"
                         )
                     }
@@ -81,7 +86,10 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
                     var expanded by remember { mutableStateOf(false) }
                     Box {
                         IconButton(onClick = { expanded = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "Opciones")
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_more_vert),
+                                contentDescription = "Opciones"
+                            )
                         }
                         DropdownMenu(
                             expanded = expanded,
@@ -94,7 +102,10 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
                                     navController.navigate("backup")
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Backup, contentDescription = null)
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_backup),
+                                        contentDescription = null
+                                    )
                                 }
                             )
                         }
@@ -106,7 +117,10 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
             FloatingActionButton(
                 onClick = { navController.navigate("notaForm") }
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Nueva nota")
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add),
+                    contentDescription = "Nueva nota"
+                )
             }
         }
     ) { innerPadding ->
@@ -150,6 +164,7 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
     }
 }
 
+
 @Composable
 fun EmptySearchState(
     searchQuery: String,
@@ -162,7 +177,7 @@ fun EmptySearchState(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = Icons.Default.SearchOff,
+            painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
@@ -182,12 +197,12 @@ fun EmptySearchState(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Button(
-            onClick = onClearSearch,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            )
+            onClick = onClearSearch
         ) {
-            Icon(Icons.Default.Clear, contentDescription = null)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_clear),
+                contentDescription = null
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text("Limpiar búsqueda")
         }
@@ -213,6 +228,7 @@ fun EnhancedListaNotas(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun EnhancedNotaCard(
     nota: com.example.notificacionesapp.data.entities.Nota,
@@ -232,7 +248,6 @@ fun EnhancedNotaCard(
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Header con título y prioridad
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -245,7 +260,6 @@ fun EnhancedNotaCard(
                     modifier = Modifier.weight(1f)
                 )
 
-                // Badge de prioridad
                 Surface(
                     shape = MaterialTheme.shapes.small,
                     color = when (nota.prioridad) {
@@ -271,7 +285,6 @@ fun EnhancedNotaCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Descripción
             if (nota.descripcion.isNotEmpty()) {
                 Text(
                     text = nota.descripcion,
@@ -282,14 +295,12 @@ fun EnhancedNotaCard(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // Metadata
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    // Hora y categoría
                     Text(
                         text = "⏰ ${nota.hora}",
                         style = MaterialTheme.typography.labelSmall,
@@ -304,38 +315,33 @@ fun EnhancedNotaCard(
                     }
                 }
 
-                // Estado y multimedia
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Indicadores de multimedia
+                    // Usando drawables para íconos multimedia
                     if (!nota.imagenUri.isNullOrEmpty()) {
                         Icon(
-                            imageVector = Icons.Default.Photo,
+                            painter = painterResource(id = R.drawable.ic_photo),
                             contentDescription = "Tiene imagen",
-                            modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                     if (!nota.audioUri.isNullOrEmpty()) {
                         Icon(
-                            imageVector = Icons.Default.Mic,
+                            painter = painterResource(id = R.drawable.ic_mic),
                             contentDescription = "Tiene audio",
-                            modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                     if (!nota.videoUri.isNullOrEmpty()) {
                         Icon(
-                            imageVector = Icons.Default.Videocam,
+                            painter = painterResource(id = R.drawable.ic_videocam),
                             contentDescription = "Tiene video",
-                            modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            modifier = Modifier.size(16.dp)
                         )
                     }
 
-                    // Estado de completado
                     Surface(
                         shape = MaterialTheme.shapes.small,
                         color = if (nota.completado) {
@@ -358,7 +364,6 @@ fun EnhancedNotaCard(
                 }
             }
 
-            // Etiquetas
             if (nota.etiquetas.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 FlowRow(

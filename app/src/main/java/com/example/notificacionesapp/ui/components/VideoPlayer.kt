@@ -2,16 +2,15 @@ package com.example.notificacionesapp.ui.components
 
 
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.notificacionesapp.R
@@ -136,7 +135,7 @@ fun VideoPlayer(
                                     )
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.Replay,
+                                    painter = painterResource(id = R.drawable.ic_replay),
                                     contentDescription = "Reiniciar",
                                     tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(24.dp)
@@ -159,7 +158,10 @@ fun VideoPlayer(
                                     )
                             ) {
                                 Icon(
-                                    imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                                    painter = painterResource(
+                                        id = if (isPlaying) R.drawable.ic_stop
+                                        else R.drawable.ic_play
+                                    ),
                                     contentDescription = if (isPlaying) "Pausar" else "Reproducir",
                                     tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(32.dp)
@@ -209,8 +211,8 @@ fun VideoPlayer(
                     contentColor = MaterialTheme.colorScheme.onError
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.eliminar_video)
+                        painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = "Eliminar video"
                     )
                 }
             }
@@ -225,15 +227,15 @@ fun VideoPlayer(
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Videocam,
+                    painter = painterResource(id = R.drawable.ic_videocam),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.sin_video),
+                    text = "Sin video",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }

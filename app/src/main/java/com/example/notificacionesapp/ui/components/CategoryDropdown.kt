@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.notificacionesapp.data.categories.CategoryManager
 
+@ExperimentalMaterial3Api
 @Composable
 fun CategoryDropdown(
     selectedCategory: String,

@@ -78,10 +78,15 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("com.google.accompanist:accompanist-flowlayout:0.28.0")
-
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     kapt("com.google.dagger:hilt-compiler:2.48")
     kapt("androidx.room:room-compiler:2.6.0")
 
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Room
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 

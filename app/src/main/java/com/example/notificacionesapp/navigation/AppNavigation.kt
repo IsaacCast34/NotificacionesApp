@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.notificacionesapp.ui.screens.HomeScreen
 import com.example.notificacionesapp.ui.screens.NotaDetalleScreen
 import com.example.notificacionesapp.ui.screens.NotaFormScreen
+import com.example.notificacionesapp.ui.screens.BackupScreen
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 
 @Composable

@@ -19,46 +19,43 @@ fun NotaDetalleScreen(
 ) {
     val nota by notaViewModel.obtenerNotaPorId(notaId).collectAsState(initial = null)
 
-    val padding = dimensionResource(id = R.dimen.padding_normal)
-    val titleSize = dimensionResource(id = R.dimen.text_size_title)
-    val bodySize = dimensionResource(id = R.dimen.text_size_body)
-
     nota?.let {
-        Column(modifier = Modifier.padding(padding)) {
-            Text(text = it.titulo, fontSize = titleSize.value.sp)
-            Spacer(modifier = Modifier.height(padding))
-            Text(text = it.descripcion, fontSize = bodySize.value.sp)
-            Spacer(modifier = Modifier.height(padding))
-            Text("${stringResource(R.string.hora)}: ${it.hora}", fontSize = bodySize.value.sp)
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = it.titulo, style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = it.descripcion, style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Hora: ${it.hora}", style = MaterialTheme.typography.bodyMedium)
             Text(
-                text = if (it.completado)
-                    stringResource(R.string.completado)
-                else
-                    stringResource(R.string.pendiente),
-                fontSize = bodySize.value.sp
+                text = if (it.completado) "Completado" else "Pendiente",
+                style = MaterialTheme.typography.bodyMedium
             )
-            Spacer(modifier = Modifier.height(padding))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row {
                 Button(onClick = {
                     navController.navigate("editarNota/${it.id}")
                 }) {
-                    Text(stringResource(R.string.editar))
+                    Text("Editar")
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = {
-                    notaViewModel.eliminar(it)
-                    navController.popBackStack()
-                }) {
-                    Text(stringResource(R.string.eliminar))
+                Button(
+                    onClick = {
+                        notaViewModel.eliminar(it)
+                        navController.popBackStack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Eliminar")
                 }
             }
         }
     } ?: run {
         Text(
-            text = stringResource(R.string.nota_no_encontrada),
-            modifier = Modifier.padding(padding)
+            text = "Nota no encontrada",
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
-

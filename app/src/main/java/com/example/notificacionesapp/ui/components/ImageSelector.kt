@@ -5,11 +5,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.notificacionesapp.R
@@ -31,14 +30,12 @@ fun ImageSelector(
             // Lanzar directamente el selector de imágenes
             imagePicker.launch("image/*")
         },
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.secondary
-        )
+        modifier = modifier
+
     ) {
         Icon(
-            imageVector = Icons.Default.Photo,
-            contentDescription = stringResource(R.string.seleccionar_imagen)
+            painter = painterResource(id = R.drawable.ic_photo),
+            contentDescription = "Seleccionar imagen"
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(stringResource(R.string.seleccionar_imagen))

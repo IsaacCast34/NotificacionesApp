@@ -6,14 +6,12 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.net.Uri
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.notificacionesapp.R
@@ -48,25 +46,17 @@ fun AudioRecorder(
     ) {
         // Indicador de estado
         if (isRecording) {
-            Card(
-                backgroundColor = MaterialTheme.colors.error.copy(alpha = 0.1f),
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colors.error
+                        strokeWidth = 2.dp
                     )
                     Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = stringResource(R.string.grabando),
-                        color = MaterialTheme.colors.error,
-                        style = MaterialTheme.typography.body2
-                    )
+                    Text("Grabando...")
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -94,10 +84,8 @@ fun AudioRecorder(
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        // Podrías mostrar un Toast aquí
                     }
                 } else {
-                    // DETENER GRABACIÓN
                     try {
                         mediaRecorder?.apply {
                             stop()
@@ -114,18 +102,15 @@ fun AudioRecorder(
                     }
                 }
             },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = if (isRecording) MaterialTheme.colors.error
-                else MaterialTheme.colors.primary
-            ),
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
-                imageVector = if (isRecording) Icons.Default.Stop else Icons.Default.Mic,
-                contentDescription = if (isRecording)
-                    stringResource(R.string.detener_grabacion)
-                else
-                    stringResource(R.string.iniciar_grabacion)
+                painter = painterResource(
+                    id = if (isRecording) R.drawable.ic_stop
+                    else R.drawable.ic_mic
+                ),
+                contentDescription = if (isRecording) "Detener grabación"
+                else "Iniciar grabación"
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
@@ -141,8 +126,8 @@ fun AudioRecorder(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Toca para grabar audio",
-                style = MaterialTheme.typography.caption,
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
         }
     }

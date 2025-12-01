@@ -12,11 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.notificacionesapp.R
 import com.example.notificacionesapp.data.backup.BackupManager
+import com.example.notificacionesapp.ui.components.LoadingScreen
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,7 @@ fun BackupScreen(
     val context = LocalContext.current
     val backupManager = remember { BackupManager(context) }
     val coroutineScope = rememberCoroutineScope()
+    val notesState by notaViewModel.todasLasNotas.collectAsState(initial = emptyList())
 
     var exportMessage by remember { mutableStateOf<String?>(null) }
     var importMessage by remember { mutableStateOf<String?>(null) }
@@ -40,8 +43,8 @@ fun BackupScreen(
         if (uri != null) {
             isLoading = true
             coroutineScope.launch {
-                val notes = notaViewModel.todasLasNotas.collectAsState(initial = emptyList()).value
-                val success = backupManager.exportNotes(notes, uri)
+                // 2. USA LA VARIABLE 'notesState' QUE YA TIENE EL VALOR ACTUAL
+                val success = backupManager.exportNotes(notesState, uri)
                 exportMessage = if (success) {
                     "Backup exportado exitosamente"
                 } else {
@@ -60,10 +63,8 @@ fun BackupScreen(
             coroutineScope.launch {
                 val importedNotes = backupManager.importNotes(uri)
                 if (importedNotes.isNotEmpty()) {
-                    // Limpiar notas existentes e importar nuevas
-                    // En una app real, podrías querer mergear en lugar de reemplazar
                     importedNotes.forEach { nota ->
-                        notaViewModel.insertar(nota.copy(id = 0)) // Reset IDs para evitar conflictos
+                        notaViewModel.insertar(nota.copy(id = 0))
                     }
                     importMessage = "${importedNotes.size} notas importadas exitosamente"
                 } else {
@@ -80,7 +81,10 @@ fun BackupScreen(
                 title = { Text("Backup y Restauración") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "Atrás"
+                        )
                     }
                 }
             )
@@ -95,7 +99,6 @@ fun BackupScreen(
             if (isLoading) {
                 LoadingScreen("Procesando...")
             } else {
-                // Export Section
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -116,12 +119,12 @@ fun BackupScreen(
                             onClick = {
                                 exportLauncher.launch(backupManager.generateBackupFileName())
                             },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(Icons.Default.Backup, contentDescription = null)
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_backup),
+                                contentDescription = null
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text("Exportar Backup")
                         }
@@ -139,7 +142,6 @@ fun BackupScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Import Section
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -160,12 +162,12 @@ fun BackupScreen(
                             onClick = {
                                 importLauncher.launch("application/json")
                             },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondary
-                            )
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(Icons.Default.Restore, contentDescription = null)
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_restore),
+                                contentDescription = null
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text("Importar Backup")
                         }
@@ -178,30 +180,6 @@ fun BackupScreen(
                                 else MaterialTheme.colorScheme.error
                             )
                         }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Info Section
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Información",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "• El backup incluye todas las notas con su multimedia\n" +
-                                    "• Los archivos se guardan en formato JSON\n" +
-                                    "• Recomendado hacer backup regularmente",
-                            style = MaterialTheme.typography.bodySmall
-                        )
                     }
                 }
             }
