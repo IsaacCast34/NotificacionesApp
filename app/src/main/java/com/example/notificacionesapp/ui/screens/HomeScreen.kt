@@ -3,6 +3,11 @@ package com.example.notificacionesapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+<<<<<<< HEAD
+=======
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +19,12 @@ import com.example.notificacionesapp.ui.components.*
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.PaddingValues
+<<<<<<< HEAD
+=======
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.flowlayout.FlowRow
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 import androidx.compose.ui.res.painterResource
 import com.example.notificacionesapp.R
 
@@ -103,6 +114,7 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
                                     )
                                 }
                             )
+<<<<<<< HEAD
                             DropdownMenuItem(
                                 text = { Text("Configuración") },
                                 onClick = {
@@ -116,6 +128,8 @@ fun HomeScreen(navController: NavController, notaViewModel: NotaViewModel) {
                                     )
                                 }
                             )
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
                         }
                     }
                 }

@@ -10,7 +10,11 @@ class NotaRepository(private val notaDao: NotaDao) {
 
     fun obtenerPorId(id: Int): Flow<Nota?> = notaDao.obtenerPorId(id)
 
+<<<<<<< HEAD
     suspend fun insertar(nota: Nota): Long = notaDao.insertar(nota)
+=======
+    suspend fun insertar(nota: Nota) = notaDao.insertar(nota)
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 
     suspend fun actualizar(nota: Nota) = notaDao.actualizar(nota)
 

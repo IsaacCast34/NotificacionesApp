@@ -14,7 +14,11 @@ interface NotaDao {
     fun obtenerPorId(id: Int): Flow<Nota?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+<<<<<<< HEAD
     suspend fun insertar(nota: Nota): Long
+=======
+    suspend fun insertar(nota: Nota)
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 
     @Update
     suspend fun actualizar(nota: Nota)

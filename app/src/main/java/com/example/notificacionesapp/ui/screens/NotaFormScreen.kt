@@ -6,7 +6,10 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+<<<<<<< HEAD
 import android.os.Build
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,7 +42,10 @@ fun NotaFormScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+<<<<<<< HEAD
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 
     var titulo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
@@ -93,6 +99,7 @@ fun NotaFormScreen(
             FloatingActionButton(
                 onClick = {
                     if (titulo.isNotBlank() && hora.isNotBlank()) {
+<<<<<<< HEAD
                         scope.launch {
                             if (notaId == null) {
                                 // 1. Crear nota con ID temporal 0
@@ -136,6 +143,28 @@ fun NotaFormScreen(
                                     videoUri = videoUri
                                 )
 
+=======
+                        val nota = Nota(
+                            id = notaId ?: 0,
+                            titulo = titulo,
+                            descripcion = descripcion,
+                            hora = hora,
+                            completado = completado,
+                            prioridad = prioridad,
+                            categoria = categoria,
+                            etiquetas = etiquetas,
+                            imagenUri = imagenUri,
+                            audioUri = audioUri,
+                            videoUri = videoUri
+                        )
+
+                        scope.launch {
+                            if (notaId == null) {
+                                notaViewModel.insertar(nota)
+                                programarAlarma(context, nota)
+                                Toast.makeText(context, "Nota creada exitosamente", Toast.LENGTH_SHORT).show()
+                            } else {
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
                                 cancelarAlarma(context, notaId)
                                 notaViewModel.actualizar(nota)
                                 programarAlarma(context, nota)
@@ -308,6 +337,7 @@ fun NotaFormScreen(
     }
 }
 
+<<<<<<< HEAD
 private fun programarAlarma(context: Context, nota: Nota) {
     try {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -365,10 +395,73 @@ private fun programarAlarma(context: Context, nota: Nota) {
     } catch (e: Exception) {
         e.printStackTrace()
         // No mostrar error para no interrumpir el flujo
+=======
+@Composable
+fun PrioridadChip(
+    texto: String,
+    seleccionada: Boolean,
+    onClick: () -> Unit
+) {
+    val backgroundColor = if (seleccionada) MaterialTheme.colorScheme.primary
+    else MaterialTheme.colorScheme.surface
+    val contentColor = if (seleccionada) MaterialTheme.colorScheme.onPrimary
+    else MaterialTheme.colorScheme.onSurface
+
+    Surface(
+        color = backgroundColor,
+        contentColor = contentColor,
+        shape = MaterialTheme.shapes.small,
+        shadowElevation = if (seleccionada) 4.dp else 0.dp,
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
+        Text(
+            text = texto,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+private fun programarAlarma(context: Context, nota: Nota) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java).apply {
+        putExtra("titulo", nota.titulo)
+        putExtra("mensaje", nota.descripcion.ifEmpty { "Recordatorio de nota" })
+    }
+
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        nota.id,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val partesHora = nota.hora.split(":")
+    if (partesHora.size == 2) {
+        val hora = partesHora[0].toInt()
+        val minuto = partesHora[1].toInt()
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, hora)
+            set(Calendar.MINUTE, minuto)
+            set(Calendar.SECOND, 0)
+
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
+        }
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
     }
 }
 
 private fun cancelarAlarma(context: Context, notaId: Int) {
+<<<<<<< HEAD
     try {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
@@ -385,4 +478,15 @@ private fun cancelarAlarma(context: Context, notaId: Int) {
         e.printStackTrace()
         // No mostrar error
     }
+=======
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        notaId,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+    alarmManager.cancel(pendingIntent)
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 }

@@ -56,10 +56,15 @@ android {
 }
 val composeBomVersion = "2024.06.00"
 dependencies {
+<<<<<<< HEAD
 
     implementation("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
 
+=======
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -85,12 +90,17 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.48")
     kapt("androidx.room:room-compiler:2.6.0")
 
+<<<<<<< HEAD
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation("androidx.media3:media3-common:1.3.1")
 // Si necesitas dash, hls, etc.
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.3.1")
+=======
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 
     // Room
     debugImplementation("androidx.compose.ui:ui-tooling")

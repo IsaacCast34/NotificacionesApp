@@ -23,8 +23,13 @@ class NotaViewModel @Inject constructor(
     val completado = mutableStateOf(false)
     val prioridad = mutableStateOf("Media")
 
+<<<<<<< HEAD
     suspend fun insertar(nota: Nota): Long {
         return notaRepository.insertar(nota)
+=======
+    fun insertar(nota: Nota) {
+        viewModelScope.launch { notaRepository.insertar(nota) }
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
     }
 
     fun actualizar(nota: Nota) {
