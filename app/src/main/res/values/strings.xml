@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">NotificacionesApp</string>
+    <string name="titulo">Título</string>
+    <string name="descripcion">Descripción</string>
+    <string name="hora">Hora</string>
+    <string name="seleccionar_hora">Seleccionar hora</string>
+    <string name="completado">¿Completado?</string>
+    <string name="prioridad">Prioridad</string>
+    <string name="alta">Alta</string>
+    <string name="media">Media</string>
+    <string name="baja">Baja</string>
+    <string name="guardar">Guardar Nota</string>
+    <string name="nota_guardada">Nota guardada</string>
+    <string name="campos_obligatorios">Completa los campos obligatorios</string>
+    <string name="notas">Notas</string>
+    <string name="nueva_nota">Nueva Nota</string><string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="nota_no_encontrada">Nota no encontrada</string>
+    <string name="pendiente">Pendiente</string>
+    <string name="editar_nota">Editar nota</string>
+    <string name="nota_actualizada">Nota actualizada</string>
+    <string name="multimedia">Multimedia</string>
+    <string name="seleccionar_imagen">Seleccionar imagen</string>
+    <string name="imagen_adjunta">Imagen adjunta</string>
+    <string name="seleccionar_audio">Seleccionar audio</string>
+    <string name="audio_adjunta">Audio adjunto</string>
+    <string name="elegir_metodo">Elegir método para seleccionar imagen</string>
+    <string name="galeria">Galería</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="eliminar_imagen">Eliminar imagen</string>
+    <string name="sin_imagen">Sin imagen</string>
+    <string name="grabar_audio">Grabar audio</string>
+    <string name="detener_grabacion">Detener grabación</string>
+    <string name="iniciar_grabacion">Iniciar grabación</string>
+    <string name="grabando">Grabando…</string>
+    <string name="audio_adjunto">Audio adjunto</string>
+    <string name="audio_grabado">Audio grabado</string>
+    <string name="campos_obligatorios_nota">Completa título y hora</string>
+    <string name="seleccionar_video">Seleccionar Video</string>
+    <string name="eliminar_video">Eliminar Video</string>
+    <string name="sin_video">Sin video seleccionado</string>
+    <string name="permiso_denegado">Permiso denegado</string>
+    <string name="permiso_requerido">Se requieren permisos para acceder a multimedia</string>
+</resources>
