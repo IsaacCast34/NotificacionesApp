@@ -9,6 +9,10 @@ import com.example.notificacionesapp.ui.screens.HomeScreen
 import com.example.notificacionesapp.ui.screens.NotaDetalleScreen
 import com.example.notificacionesapp.ui.screens.NotaFormScreen
 import com.example.notificacionesapp.ui.screens.BackupScreen
+<<<<<<< HEAD
+import com.example.notificacionesapp.ui.screens.ConfiguracionScreen
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 import com.example.notificacionesapp.viewmodel.NotaViewModel
 
 @Composable
@@ -44,6 +48,12 @@ fun AppNavigation(navController: NavHostController) {
             val notaViewModel: NotaViewModel = hiltViewModel()
             BackupScreen(navController = navController, notaViewModel = notaViewModel)
         }
+<<<<<<< HEAD
+        composable("configuracion") {
+            ConfiguracionScreen(navController = navController)
+        }
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
     }
 }
 

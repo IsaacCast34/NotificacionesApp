@@ -6,6 +6,10 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+<<<<<<< HEAD
+import android.os.Build
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,6 +42,10 @@ fun NotaFormScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+<<<<<<< HEAD
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+=======
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 
     var titulo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
@@ -91,6 +99,51 @@ fun NotaFormScreen(
             FloatingActionButton(
                 onClick = {
                     if (titulo.isNotBlank() && hora.isNotBlank()) {
+<<<<<<< HEAD
+                        scope.launch {
+                            if (notaId == null) {
+                                // 1. Crear nota con ID temporal 0
+                                val notaParaBD = Nota(
+                                    id = 0,
+                                    titulo = titulo,
+                                    descripcion = descripcion,
+                                    hora = hora,
+                                    completado = completado,
+                                    prioridad = prioridad,
+                                    categoria = categoria,
+                                    etiquetas = etiquetas,
+                                    imagenUri = imagenUri,
+                                    audioUri = audioUri,
+                                    videoUri = videoUri
+                                )
+
+                                // 2. Insertar y obtener el ID REAL generado por Room
+                                val nuevoId = notaViewModel.insertar(notaParaBD)
+
+                                // 3. Crear copia con el ID CORRECTO
+                                val notaConId = notaParaBD.copy(id = nuevoId.toInt())
+
+                                // 4. Programar alarma con el ID CORRECTO
+                                programarAlarma(context, notaConId)
+
+                                Toast.makeText(context, "Nota creada exitosamente", Toast.LENGTH_SHORT).show()
+                            } else {
+                                // EDITAR NOTA EXISTENTE
+                                val nota = Nota(
+                                    id = notaId,
+                                    titulo = titulo,
+                                    descripcion = descripcion,
+                                    hora = hora,
+                                    completado = completado,
+                                    prioridad = prioridad,
+                                    categoria = categoria,
+                                    etiquetas = etiquetas,
+                                    imagenUri = imagenUri,
+                                    audioUri = audioUri,
+                                    videoUri = videoUri
+                                )
+
+=======
                         val nota = Nota(
                             id = notaId ?: 0,
                             titulo = titulo,
@@ -111,6 +164,7 @@ fun NotaFormScreen(
                                 programarAlarma(context, nota)
                                 Toast.makeText(context, "Nota creada exitosamente", Toast.LENGTH_SHORT).show()
                             } else {
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
                                 cancelarAlarma(context, notaId)
                                 notaViewModel.actualizar(nota)
                                 programarAlarma(context, nota)
@@ -283,6 +337,65 @@ fun NotaFormScreen(
     }
 }
 
+<<<<<<< HEAD
+private fun programarAlarma(context: Context, nota: Nota) {
+    try {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Verificar permiso en Android 12+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Toast.makeText(
+                    context,
+                    "Permite alarmas exactas en configuración para recibir notificaciones a tiempo",
+                    Toast.LENGTH_LONG
+                ).show()
+                return
+            }
+        }
+
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("titulo", nota.titulo)
+            putExtra("mensaje", nota.descripcion.ifEmpty { "Recordatorio de nota" })
+            putExtra("notaId", nota.id)
+        }
+
+        // Usar el ID de la nota como requestCode
+        val requestCode = nota.id
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val partesHora = nota.hora.split(":")
+        if (partesHora.size == 2) {
+            val hora = partesHora[0].toInt()
+            val minuto = partesHora[1].toInt()
+
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hora)
+                set(Calendar.MINUTE, minuto)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+
+                if (timeInMillis <= System.currentTimeMillis()) {
+                    add(Calendar.DAY_OF_YEAR, 1)
+                }
+            }
+
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        // No mostrar error para no interrumpir el flujo
+=======
 @Composable
 fun PrioridadChip(
     texto: String,
@@ -343,10 +456,29 @@ private fun programarAlarma(context: Context, nota: Nota) {
             calendar.timeInMillis,
             pendingIntent
         )
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
     }
 }
 
 private fun cancelarAlarma(context: Context, notaId: Int) {
+<<<<<<< HEAD
+    try {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            notaId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.cancel(pendingIntent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        // No mostrar error
+    }
+=======
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     val pendingIntent = PendingIntent.getBroadcast(
@@ -356,4 +488,5 @@ private fun cancelarAlarma(context: Context, notaId: Int) {
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     alarmManager.cancel(pendingIntent)
+>>>>>>> 027f8f25115bc5ecebc6ed55cd5a024dbdd8f879
 }
